@@ -1,43 +1,61 @@
-import React, { useState } from 'react';
-import ProductCard from './components/ProductCard';
-import './App.css';
+import React, { useState } from "react";
+import ProductCard from "./components/ProductCard";
+import "./App.css";
 
-const initialProducts = [
-  {
-    id: 1,
-    name: "Wireless Headphones",
-    description: "High-quality sound with noise cancellation.",
-    image: "https://picsum.photos/300/200?random=1",
-    avgRating: 4.2,
-    totalRatings: 10
-  },
-  {
-    id: 2,
-    name: "Smartwatch",
-    description: "Track your fitness and notifications.",
-    image: "https://picsum.photos/300/200?random=2",
-    avgRating: 3.8,
-    totalRatings: 15
-  },
-  {
-    id: 3,
-    name: "Portable Speaker",
-    description: "Powerful sound in a compact design.",
-    image: "https://picsum.photos/300/200?random=3",
-    avgRating: 4.5,
-    totalRatings: 8
-  }
-];
+// Import local images
+import product1Image from "./assets/ghidorah.png";
+import product2Image from "./assets/shopping.png";
 
-function App() {
+const App = () => {
+  const [products, setProducts] = useState([
+    {
+      id: 1,
+      name: "Product 1",
+      description: "This is product 1",
+      image: product1Image, // Use imported image
+      avgRating: 0,
+      totalRatings: 0,
+    },
+    {
+      id: 2,
+      name: "Product 2",
+      description: "This is product 2",
+      image: product2Image, // Use imported image
+      avgRating: 0,
+      totalRatings: 0,
+    },
+  ]);
 
- 
+  const handleRatingSubmit = (productId, newRating) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId
+          ? {
+              ...product,
+              avgRating:
+                (product.avgRating * product.totalRatings + newRating) /
+                (product.totalRatings + 1),
+              totalRatings: product.totalRatings + 1,
+            }
+          : product
+      )
+    );
+  };
 
   return (
-    <div>
-     {/* code here */}
+    <div className="app">
+      <h1>Product Ratings</h1>
+      <div className="product-list">
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            onRatingSubmit={handleRatingSubmit}
+          />
+        ))}
+      </div>
     </div>
   );
-}
+};
 
 export default App;
